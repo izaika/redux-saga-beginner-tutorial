@@ -1,17 +1,18 @@
-import 'babel-polyfill';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, compose } from 'redux';
 
 import Counter from './Counter';
 import reducer from './reducers';
 
-const store = createStore(reducer);
+const composeEnhancers =
+  window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
+
+const store = createStore(reducer, null, composeEnhancers());
 
 const action = type => store.dispatch({ type });
 
-function render() {
+const render = () => {
   ReactDOM.render(
     <Counter
       value={store.getState()}
@@ -20,7 +21,7 @@ function render() {
     />,
     document.getElementById('root')
   );
-}
+};
 
 render();
 store.subscribe(render);
